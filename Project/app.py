@@ -8,14 +8,19 @@ import json
 # Initialize Flask app
 app = Flask(__name__)
 
+# Dynamically locate the model path
+base_path = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(base_path, 'models', 'fruit_classifier.h5')
+
 # Load the trained model
 try:
-    model = load_model('models/fruit_classifier.h5')
-    print("Model loaded successfully")
+    model = load_model(model_path)
+    print("✅ Model loaded successfully.")
 except Exception as e:
-    print(f"Error loading model: {e}")
+    model = None
+    print(f"❌ Error loading model: {e}")
 
-# Define class names based on your 16-class dataset
+# Class labels
 class_names = [
     'freshapples', 'freshbanana', 'freshcapsicum', 'freshcucumber',
     'freshokra', 'freshoranges', 'freshpotato', 'freshtomato',
@@ -23,9 +28,10 @@ class_names = [
     'rottenokra', 'rottenoranges', 'rottenpotato', 'rottentomato'
 ]
 
-# Ensure the static folder exists
-if not os.path.exists('static'):
-    os.makedirs('static')
+# Ensure 'static' folder exists
+static_dir = os.path.join(base_path, 'static')
+if not os.path.exists(static_dir):
+    os.makedirs(static_dir)
 
 @app.route('/')
 def home():
@@ -42,32 +48,35 @@ def predict():
     
     if file:
         try:
-            # Save the uploaded file to the static folder
-            image_filename = os.path.join('static', file.filename)
+            # Save uploaded file
+            image_filename = os.path.join(static_dir, file.filename)
             file.save(image_filename)
-            print(f"Image saved as {image_filename}")
+            print(f"🖼️ Image saved: {image_filename}")
 
-            # Preprocess the image
+            # Preprocess image
             img = image.load_img(image_filename, target_size=(128, 128))
             img_array = image.img_to_array(img)
             img_array = np.expand_dims(img_array, axis=0)
             img_array /= 255.0
-            print("Image preprocessed successfully")
+            print("✅ Image preprocessed")
 
-            # Make prediction
+            if model is None:
+                return jsonify({'error': 'Model not loaded'}), 500
+
+            # Predict
             predictions = model.predict(img_array)
-            predicted_class_index = np.argmax(predictions[0])
-            predicted_class = class_names[predicted_class_index]
-            confidence = predictions[0][predicted_class_index]
-            print(f"Prediction: {predicted_class}, Confidence: {confidence}")
+            predicted_index = np.argmax(predictions[0])
+            predicted_class = class_names[predicted_index]
+            confidence = predictions[0][predicted_index]
 
             result = {
                 'predicted_class': predicted_class.replace('fresh', 'Fresh ').replace('rotten', 'Rotten '),
                 'confidence': float(confidence)
             }
+            print(f"🧠 Prediction: {result}")
             return jsonify(result)
         except Exception as e:
-            print(f"Error during prediction: {e}")
+            print(f"❌ Prediction error: {e}")
             return jsonify({'error': f'Prediction failed: {str(e)}'}), 500
 
 if __name__ == '__main__':

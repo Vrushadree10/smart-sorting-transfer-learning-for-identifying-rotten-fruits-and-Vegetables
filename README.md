@@ -88,11 +88,7 @@ Then, open your browser at:
 ## 📁 Project Structure
 
 ```
-SmartSortingApp/
-│
-├── dataset/
-│   ├── train/
-│   └── test/
+Project File/
 ├── model/
 │   ├── fruit_classifier.h5
 │   └── class_indices.json
