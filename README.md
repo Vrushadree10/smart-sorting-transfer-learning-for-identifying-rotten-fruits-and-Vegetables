@@ -57,26 +57,7 @@ Follow these steps to run the app on your machine:
 
 ```bash
 git clone https://github.com/yourusername/SmartSortingApp.git
-cd SmartSortingApp
-```
-
-### 2️⃣ Set Up Virtual Environment
-
-```bash
-python -m venv venv
-venv\Scripts\activate       # For Windows
-# source venv/bin/activate  # For macOS/Linux
-```
-
-### 3️⃣ Install Required Packages
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4️⃣ Start the Flask Server
-
-```bash
+cd Project
 python app.py
 ```
 
