@@ -57,8 +57,10 @@ Follow these steps to run the app on your machine:
 
 ```bash
 git clone https://github.com/Vrushadree10/smart-sorting-transfer-learning-for-identifying-rotten-fruits-and-Vegetables
-cd Project
+cd smart-sorting-transfer-learning-for-identifying-rotten-fruits-and-Vegetables
+pip install -r requirements.txt
 python app.py
+
 ```
 
 Then, open your browser at:
