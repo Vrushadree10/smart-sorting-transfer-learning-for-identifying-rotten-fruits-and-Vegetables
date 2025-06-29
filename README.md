@@ -56,7 +56,7 @@ Follow these steps to run the app on your machine:
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/SmartSortingApp.git
+git clone https://github.com/Vrushadree10/smart-sorting-transfer-learning-for-identifying-rotten-fruits-and-Vegetables
 cd Project
 python app.py
 ```
